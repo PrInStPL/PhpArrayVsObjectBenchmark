@@ -6,7 +6,7 @@ declare(strict_types=1);
 require_once('classes/StaticReport.php');
 
 // config
-const FAST_TEST = true;
+const FAST_TEST = false;
 const ECHO_NUMBERS_ONLY = false;
 /** @const ?int RESULTS_FORMAT Use: StaticReport::PRINT_CSV | StaticReport::PRINT_CLI */
 const RESULTS_FORMAT = StaticReport::PRINT_CLI;
