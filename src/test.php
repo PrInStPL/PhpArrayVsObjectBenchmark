@@ -10,7 +10,7 @@ require_once(ABS_PATH . '/classes/StaticReport.php');
 
 
 // config
-const FAST_TEST = false;
+const FAST_TEST = true;
 const ECHO_NUMBERS_ONLY = false;
 /** @const ?int RESULTS_FORMAT Use: StaticReport::PRINT_CSV | StaticReport::PRINT_CLI */
 const RESULTS_FORMAT = StaticReport::PRINT_CLI;
