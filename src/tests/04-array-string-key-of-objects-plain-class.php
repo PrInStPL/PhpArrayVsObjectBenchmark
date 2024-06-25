@@ -25,12 +25,14 @@ $measurement->start();
 /** @var array<non-empty-string, PlainClass> $arraysOf */
 $arraysOf = [];
 for ($i = 0; $i < ELEMENTS_COUNT; $i++) {
+    $valueInfo = valueOfInfo(CASE_CREATE, $i);
     $element = new PlainClass();
-    $element->info = valueOfInfo(CASE_CREATE, $i);
+    $element->info = $valueInfo;
     $element->first = valueOfFirst($i);
     $element->second = $i;
-    $arraysOf[valueOfInfo(CASE_CREATE, $i)] = $element;
+    $arraysOf[$valueInfo] = $element;
 }
+unset($valueInfo);
 $measurement->stop();
 echoResults($measurement);
 

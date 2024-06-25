@@ -22,12 +22,14 @@ unset($arraysOf, $element);
 $measurement->start();
 $arraysOf = [];
 for ($i = 0; $i < ELEMENTS_COUNT; $i++) {
-    $arraysOf["$i"] = [
-        valueOfInfo(CASE_CREATE, $i),
+    $valueInfo = valueOfInfo(CASE_CREATE, $i);
+    $arraysOf[$valueInfo] = [
+        $valueInfo,
         valueOfFirst($i),
         $i,
     ];
 }
+unset($valueInfo);
 $measurement->stop();
 echoResults($measurement);
 
