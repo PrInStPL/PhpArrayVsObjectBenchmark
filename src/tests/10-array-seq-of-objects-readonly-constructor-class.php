@@ -211,3 +211,8 @@ echoResults();
 
 echoHeader(CASE_SET, count($arraysOf) * REPETITIONS_SET, CASE_SET_3);
 echoResults();
+
+
+
+echoHeader(CASE_SET, count($arraysOf) * REPETITIONS_SET, CASE_SET_4);
+echoResults();

@@ -205,3 +205,24 @@ for ($i = 0; $i < REPETITIONS_SET; $i++) {
 }
 $measurement->stop();
 echoResults($measurement);
+
+
+
+echoHeader(CASE_SET, count($arraysOf) * REPETITIONS_SET, CASE_SET_4);
+unset($element);
+$measurement->start();
+for ($i = 0; $i < REPETITIONS_SET; $i++) {
+    array_walk(
+        $arraysOf,
+        function(SetterSingleReturnClass &$element) use ($i): bool {
+            $element
+                ->setInfo(valueOfInfo(CASE_SET_4, $i))
+                ->setFirst(valueOfFirst($i))
+                ->setSecond($i)
+            ;
+            return true;
+        }
+    );
+}
+$measurement->stop();
+echoResults($measurement);

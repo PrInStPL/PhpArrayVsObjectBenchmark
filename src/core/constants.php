@@ -16,3 +16,4 @@ const CASE_SET = 'SET';
 const CASE_SET_1 = 'foreach key => element; by key';
 const CASE_SET_2 = 'foreach key => &element; by reference';
 const CASE_SET_3 = 'array_map';
+const CASE_SET_4 = 'array_walk';
