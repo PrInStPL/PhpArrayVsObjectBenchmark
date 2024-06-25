@@ -10,17 +10,20 @@ if (!defined('ABS_PATH')) {
 
 require_once(ABS_PATH . '/core/constants.php');
 require_once(ABS_PATH . '/core/functions.php');
+require_once(ABS_PATH . '/classes/Measurement.php');
 require_once(ABS_PATH . '/classes/ConstructorClass.php');
 
 # # # # # # # # # # # # # # # # # # # #
 echoSection('Array (seq) of objects (ConstructorClass)');
+$measurement = new Measurement();
+
+
 
 echoHeader(CASE_CREATE, ELEMENTS_COUNT);
 unset($arraysOf, $element);
+$measurement->start();
 /** @var ConstructorClass[] $arraysOf */
 $arraysOf = [];
-$time_start = microtime(true);
-$memory_start = memory_get_usage();
 for ($i = 0; $i < ELEMENTS_COUNT; $i++) {
     $element = new ConstructorClass(
         valueOfInfo(CASE_CREATE, $i),
@@ -29,14 +32,14 @@ for ($i = 0; $i < ELEMENTS_COUNT; $i++) {
     );
     $arraysOf[] = $element;
 }
-$memory_end = memory_get_usage();
-$time_end = microtime(true);
-echoResults($time_end - $time_start, $memory_end - $memory_start);
+$measurement->stop();
+echoResults($measurement);
+
+
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_1);
 unset($element, $valueInfo, $valueFirst, $valueSecond);
-$time_start = microtime(true);
-$memory_start = memory_get_usage();
+$measurement->start();
 for ($i = 0; $i < REPETITIONS_GET; $i++) {
     foreach ($arraysOf as $element) {
         $valueInfo = $element->info;
@@ -44,14 +47,14 @@ for ($i = 0; $i < REPETITIONS_GET; $i++) {
         $valueSecond = $element->second;
     }
 }
-$time_end = microtime(true);
-$memory_end = memory_get_usage();
-echoResults($time_end - $time_start, $memory_end - $memory_start);
+$measurement->stop();
+echoResults($measurement);
+
+
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_2);
 unset($element, $valueInfo, $valueFirst, $valueSecond);
-$time_start = microtime(true);
-$memory_start = memory_get_usage();
+$measurement->start();
 for ($i = 0; $i < REPETITIONS_GET; $i++) {
     foreach ($arraysOf as $element) {
         $valueInfo = $element->getInfo();
@@ -59,27 +62,27 @@ for ($i = 0; $i < REPETITIONS_GET; $i++) {
         $valueSecond = $element->getSecond();
     }
 }
-$time_end = microtime(true);
-$memory_end = memory_get_usage();
-echoResults($time_end - $time_start, $memory_end - $memory_start);
+$measurement->stop();
+echoResults($measurement);
+
+
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_3);
 unset($element, $valueInfo, $valueFirst, $valueSecond);
-$time_start = microtime(true);
-$memory_start = memory_get_usage();
+$measurement->start();
 for ($i = 0; $i < REPETITIONS_GET; $i++) {
     foreach ($arraysOf as $element) {
         [$valueInfo, $valueFirst, $valueSecond] = $element->getAll();
     }
 }
-$time_end = microtime(true);
-$memory_end = memory_get_usage();
-echoResults($time_end - $time_start, $memory_end - $memory_start);
+$measurement->stop();
+echoResults($measurement);
+
+
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_4);
 unset($element, $valueInfo, $valueFirst, $valueSecond);
-$time_start = microtime(true);
-$memory_start = memory_get_usage();
+$measurement->start();
 for ($i = 0; $i < REPETITIONS_GET; $i++) {
     foreach ($arraysOf as $element) {
         $valueInfo = $element->getInfoByTrait();
@@ -87,27 +90,27 @@ for ($i = 0; $i < REPETITIONS_GET; $i++) {
         $valueSecond = $element->getSecondByTrait();
     }
 }
-$time_end = microtime(true);
-$memory_end = memory_get_usage();
-echoResults($time_end - $time_start, $memory_end - $memory_start);
+$measurement->stop();
+echoResults($measurement);
+
+
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_5);
 unset($element, $valueInfo, $valueFirst, $valueSecond);
-$time_start = microtime(true);
-$memory_start = memory_get_usage();
+$measurement->start();
 for ($i = 0; $i < REPETITIONS_GET; $i++) {
     foreach ($arraysOf as $element) {
         [$valueInfo, $valueFirst, $valueSecond] = $element->getAllByTrait();
     }
 }
-$time_end = microtime(true);
-$memory_end = memory_get_usage();
-echoResults($time_end - $time_start, $memory_end - $memory_start);
+$measurement->stop();
+echoResults($measurement);
+
+
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_6);
-unset($element, $valueInfo, $valueFirst, $valueSecond);
-$time_start = microtime(true);
-$memory_start = memory_get_usage();
+unset($key, $element, $valueInfo, $valueFirst, $valueSecond);
+$measurement->start();
 for ($i = 0; $i < REPETITIONS_GET; $i++) {
     foreach ($arraysOf as $key => $element) {
         $valueInfo = $element->info;
@@ -115,14 +118,14 @@ for ($i = 0; $i < REPETITIONS_GET; $i++) {
         $valueSecond = $element->second;
     }
 }
-$time_end = microtime(true);
-$memory_end = memory_get_usage();
-echoResults($time_end - $time_start, $memory_end - $memory_start);
+$measurement->stop();
+echoResults($measurement);
+
+
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_7);
-unset($element, $valueInfo, $valueFirst, $valueSecond);
-$time_start = microtime(true);
-$memory_start = memory_get_usage();
+unset($key, $element, $valueInfo, $valueFirst, $valueSecond);
+$measurement->start();
 for ($i = 0; $i < REPETITIONS_GET; $i++) {
     foreach ($arraysOf as $key => $element) {
         $valueInfo = $arraysOf[$key]->info;
@@ -130,14 +133,14 @@ for ($i = 0; $i < REPETITIONS_GET; $i++) {
         $valueSecond = $arraysOf[$key]->second;
     }
 }
-$time_end = microtime(true);
-$memory_end = memory_get_usage();
-echoResults($time_end - $time_start, $memory_end - $memory_start);
+$measurement->stop();
+echoResults($measurement);
+
+
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_8);
-unset($element, $valueInfo, $valueFirst, $valueSecond);
-$time_start = microtime(true);
-$memory_start = memory_get_usage();
+unset($key, $element, $valueInfo, $valueFirst, $valueSecond);
+$measurement->start();
 for ($i = 0; $i < REPETITIONS_GET; $i++) {
     foreach (array_keys($arraysOf) as $key) {
         $valueInfo = $arraysOf[$key]->info;
@@ -145,56 +148,48 @@ for ($i = 0; $i < REPETITIONS_GET; $i++) {
         $valueSecond = $arraysOf[$key]->second;
     }
 }
-$time_end = microtime(true);
-$memory_end = memory_get_usage();
-echoResults($time_end - $time_start, $memory_end - $memory_start);
+$measurement->stop();
+echoResults($measurement);
 
-$arraysOfCopy = $arraysOf;
+
 
 echoHeader(CASE_SET, count($arraysOf) * REPETITIONS_SET, CASE_SET_1);
-unset($element);
-$time_start = microtime(true);
-$memory_start = memory_get_usage();
+unset($key, $element);
+$measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     foreach ($arraysOf as $key => $element) {
-        $arraysOf[$key]->info = valueOfInfo(CASE_SET, $i);
+        $arraysOf[$key]->info = valueOfInfo(CASE_SET_1, $i);
         $arraysOf[$key]->first = valueOfFirst($i);
         $arraysOf[$key]->second = $i;
     }
 }
-$time_end = microtime(true);
-$memory_end = memory_get_usage();
-echoResults($time_end - $time_start, $memory_end - $memory_start);
+$measurement->stop();
+echoResults($measurement);
 
-unset($arraysOf);
-$arraysOf = $arraysOfCopy;
+
 
 echoHeader(CASE_SET, count($arraysOf) * REPETITIONS_SET, CASE_SET_2);
-unset($element);
-$time_start = microtime(true);
-$memory_start = memory_get_usage();
+unset($key, $element);
+$measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     foreach ($arraysOf as $key => &$element) {
-        $element->info = valueOfInfo(CASE_SET, $i);
+        $element->info = valueOfInfo(CASE_SET_2, $i);
         $element->first = valueOfFirst($i);
         $element->second = $i;
     }
 }
-$time_end = microtime(true);
-$memory_end = memory_get_usage();
-echoResults($time_end - $time_start, $memory_end - $memory_start);
+$measurement->stop();
+echoResults($measurement);
 
-unset($arraysOf);
-$arraysOf = $arraysOfCopy;
+
 
 echoHeader(CASE_SET, count($arraysOf) * REPETITIONS_SET, CASE_SET_3);
-unset($element, $valueInfo, $valueFirst, $valueSecond);
-$time_start = microtime(true);
-$memory_start = memory_get_usage();
+unset($element);
+$measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
-    array_map(
+    $arraysOf = array_map(
         function(ConstructorClass $element) use ($i): ConstructorClass {
-            $element->info = valueOfInfo(CASE_SET, $i);
+            $element->info = valueOfInfo(CASE_SET_3, $i);
             $element->first = valueOfFirst($i);
             $element->second = $i;
             return $element;
@@ -202,6 +197,5 @@ for ($i = 0; $i < REPETITIONS_SET; $i++) {
         $arraysOf
     );
 }
-$time_end = microtime(true);
-$memory_end = memory_get_usage();
-echoResults($time_end - $time_start, $memory_end - $memory_start);
+$measurement->stop();
+echoResults($measurement);

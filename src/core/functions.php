@@ -6,6 +6,7 @@ if (!defined('ABS_PATH')) {
     exit('You have to run main test file!');
 }
 
+require_once(ABS_PATH . '/classes/Measurement.php');
 require_once(ABS_PATH . '/classes/StaticReport.php');
 
 /**
@@ -51,6 +52,8 @@ function echoSection(string $info): void {
  */
 function echoHeader(string $name, int $repetitions, string $info = ''): void {
     $nameInfo = $name . (empty($info) ? '' : " ($info)");
+    $repetitions = number_format($repetitions, 0, '', ' ');
+
     echo PHP_EOL
         . (ECHO_NUMBERS_ONLY
             ? ''
@@ -65,12 +68,14 @@ function echoHeader(string $name, int $repetitions, string $info = ''): void {
 }
 
 /**
- * @param float|null $time
- * @param int|null   $memory
+ * @param Measurement|null $stat
  *
  * @return void
  */
-function echoResults(?float $time, ?int $memory): void {
+function echoResults(?Measurement $stat = null): void {
+    $time = $stat ? (string) $stat->getTimeTaken() : null;
+    $memory = $stat ? number_format($stat->getMemoryUsed(), 0, '', ' ') : null;
+
     echo (ECHO_NUMBERS_ONLY ? '' : 'Time taken (seconds): ') . $time . PHP_EOL
         . (ECHO_NUMBERS_ONLY ? '' : 'Memory used (bytes): ') . $memory . PHP_EOL
     ;

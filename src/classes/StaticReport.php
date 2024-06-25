@@ -48,12 +48,12 @@ abstract class StaticReport
     }
 
     /**
-     * @param string     $type
-     * @param float|null $result
+     * @param string      $type
+     * @param string|null $result
      *
      * @return void
      */
-    public static function addResult(string $type, ?float $result): void
+    public static function addResult(string $type, ?string $result): void
     {
         $section = array_key_last(self::$results);
         self::$results[$section][array_key_last(self::$results[$section])][$type] = $result;
@@ -140,7 +140,7 @@ abstract class StaticReport
             $data .= 'Results:' . PHP_EOL;
             $data .= sprintf("  %{$firstColumnLength}s", '|');
             foreach ($sections as $sectionShortName => $sectionName) {
-                $data .= sprintf(" %{$columnsLength[$sectionName]}s |", $sectionShortName);
+                $data .= sprintf(" %$columnsLength[$sectionName]s |", $sectionShortName);
             }
             $data .= PHP_EOL;
 

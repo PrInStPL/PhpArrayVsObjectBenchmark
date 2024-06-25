@@ -9,20 +9,23 @@ if (!defined('ABS_PATH')) {
 
 require_once(ABS_PATH . '/core/constants.php');
 require_once(ABS_PATH . '/core/functions.php');
+require_once(ABS_PATH . '/classes/Measurement.php');
 if (80200 <= PHP_VERSION_ID) {
     require_once(ABS_PATH . '/classes/ReadonlyConstructorClass.php');
 }
 
 // # # # # # # # # # # # # # # # # # # # #
 echoSection('Array (seq) of objects (ReadonlyConstructorClass)');
+$measurement = new Measurement();
+
+
 
 echoHeader(CASE_CREATE, ELEMENTS_COUNT);
 if (80200 <= PHP_VERSION_ID) {
     unset($arraysOf, $element);
+    $measurement->start();
     /** @var ReadonlyConstructorClass[] $arraysOf */
     $arraysOf = [];
-    $time_start = microtime(true);
-    $memory_start = memory_get_usage();
     for ($i = 0; $i < ELEMENTS_COUNT; $i++) {
         $element = new ReadonlyConstructorClass(
             valueOfInfo(CASE_CREATE, $i),
@@ -31,19 +34,19 @@ if (80200 <= PHP_VERSION_ID) {
         );
         $arraysOf[] = $element;
     }
-    $memory_end = memory_get_usage();
-    $time_end = microtime(true);
-    echoResults($time_end - $time_start, $memory_end - $memory_start);
+    $measurement->stop();
+    echoResults($measurement);
 } else {
-    echoResults(null, null);
+    echoResults();
     $arraysOf = [];
 }
+
+
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_1);
 if (80200 <= PHP_VERSION_ID) {
     unset($element, $valueInfo, $valueFirst, $valueSecond);
-    $time_start = microtime(true);
-    $memory_start = memory_get_usage();
+    $measurement->start();
     for ($i = 0; $i < REPETITIONS_GET; $i++) {
         foreach ($arraysOf as $element) {
             $valueInfo = $element->info;
@@ -51,18 +54,18 @@ if (80200 <= PHP_VERSION_ID) {
             $valueSecond = $element->second;
         }
     }
-    $time_end = microtime(true);
-    $memory_end = memory_get_usage();
-    echoResults($time_end - $time_start, $memory_end - $memory_start);
+    $measurement->stop();
+    echoResults($measurement);
 } else {
-    echoResults(null, null);
+    echoResults();
 }
+
+
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_2);
 if (80200 <= PHP_VERSION_ID) {
     unset($element, $valueInfo, $valueFirst, $valueSecond);
-    $time_start = microtime(true);
-    $memory_start = memory_get_usage();
+    $measurement->start();
     for ($i = 0; $i < REPETITIONS_GET; $i++) {
         foreach ($arraysOf as $element) {
             $valueInfo = $element->getInfo();
@@ -70,18 +73,18 @@ if (80200 <= PHP_VERSION_ID) {
             $valueSecond = $element->getSecond();
         }
     }
-    $time_end = microtime(true);
-    $memory_end = memory_get_usage();
-    echoResults($time_end - $time_start, $memory_end - $memory_start);
+    $measurement->stop();
+    echoResults($measurement);
 } else {
-    echoResults(null, null);
+    echoResults();
 }
+
+
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_3);
 if (80200 <= PHP_VERSION_ID) {
     unset($element, $valueInfo, $valueFirst, $valueSecond);
-    $time_start = microtime(true);
-    $memory_start = memory_get_usage();
+    $measurement->start();
     for ($i = 0; $i < REPETITIONS_GET; $i++) {
         foreach ($arraysOf as $element) {
             [
@@ -91,18 +94,18 @@ if (80200 <= PHP_VERSION_ID) {
             ] = $element->getAll();
         }
     }
-    $time_end = microtime(true);
-    $memory_end = memory_get_usage();
-    echoResults($time_end - $time_start, $memory_end - $memory_start);
+    $measurement->stop();
+    echoResults($measurement);
 } else {
-    echoResults(null, null);
+    echoResults();
 }
+
+
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_4);
 if (80200 <= PHP_VERSION_ID) {
     unset($element, $valueInfo, $valueFirst, $valueSecond);
-    $time_start = microtime(true);
-    $memory_start = memory_get_usage();
+    $measurement->start();
     for ($i = 0; $i < REPETITIONS_GET; $i++) {
         foreach ($arraysOf as $element) {
             $valueInfo = $element->getInfoByTrait();
@@ -110,18 +113,18 @@ if (80200 <= PHP_VERSION_ID) {
             $valueSecond = $element->getSecondByTrait();
         }
     }
-    $time_end = microtime(true);
-    $memory_end = memory_get_usage();
-    echoResults($time_end - $time_start, $memory_end - $memory_start);
+    $measurement->stop();
+    echoResults($measurement);
 } else {
-    echoResults(null, null);
+    echoResults();
 }
+
+
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_5);
 if (80200 <= PHP_VERSION_ID) {
     unset($element, $valueInfo, $valueFirst, $valueSecond);
-    $time_start = microtime(true);
-    $memory_start = memory_get_usage();
+    $measurement->start();
     for ($i = 0; $i < REPETITIONS_GET; $i++) {
         foreach ($arraysOf as $element) {
             [
@@ -131,18 +134,18 @@ if (80200 <= PHP_VERSION_ID) {
             ] = $element->getAllByTrait();
         }
     }
-    $time_end = microtime(true);
-    $memory_end = memory_get_usage();
-    echoResults($time_end - $time_start, $memory_end - $memory_start);
+    $measurement->stop();
+    echoResults($measurement);
 } else {
-    echoResults(null, null);
+    echoResults();
 }
+
+
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_6);
 if (80200 <= PHP_VERSION_ID) {
-    unset($element, $valueInfo, $valueFirst, $valueSecond);
-    $time_start = microtime(true);
-    $memory_start = memory_get_usage();
+    unset($key, $element, $valueInfo, $valueFirst, $valueSecond);
+    $measurement->start();
     for ($i = 0; $i < REPETITIONS_GET; $i++) {
         foreach ($arraysOf as $key => $element) {
             $valueInfo = $element->info;
@@ -150,18 +153,18 @@ if (80200 <= PHP_VERSION_ID) {
             $valueSecond = $element->second;
         }
     }
-    $time_end = microtime(true);
-    $memory_end = memory_get_usage();
-    echoResults($time_end - $time_start, $memory_end - $memory_start);
+    $measurement->stop();
+    echoResults($measurement);
 } else {
-    echoResults(null, null);
+    echoResults();
 }
+
+
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_7);
 if (80200 <= PHP_VERSION_ID) {
-    unset($element, $valueInfo, $valueFirst, $valueSecond);
-    $time_start = microtime(true);
-    $memory_start = memory_get_usage();
+    unset($key, $element, $valueInfo, $valueFirst, $valueSecond);
+    $measurement->start();
     for ($i = 0; $i < REPETITIONS_GET; $i++) {
         foreach ($arraysOf as $key => $element) {
             $valueInfo = $arraysOf[$key]->info;
@@ -169,18 +172,18 @@ if (80200 <= PHP_VERSION_ID) {
             $valueSecond = $arraysOf[$key]->second;
         }
     }
-    $time_end = microtime(true);
-    $memory_end = memory_get_usage();
-    echoResults($time_end - $time_start, $memory_end - $memory_start);
+    $measurement->stop();
+    echoResults($measurement);
 } else {
-    echoResults(null, null);
+    echoResults();
 }
+
+
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_8);
 if (80200 <= PHP_VERSION_ID) {
-    unset($element, $valueInfo, $valueFirst, $valueSecond);
-    $time_start = microtime(true);
-    $memory_start = memory_get_usage();
+    unset($key, $element, $valueInfo, $valueFirst, $valueSecond);
+    $measurement->start();
     for ($i = 0; $i < REPETITIONS_GET; $i++) {
         foreach (array_keys($arraysOf) as $key) {
             $valueInfo = $arraysOf[$key]->info;
@@ -188,18 +191,23 @@ if (80200 <= PHP_VERSION_ID) {
             $valueSecond = $arraysOf[$key]->second;
         }
     }
-    $time_end = microtime(true);
-    $memory_end = memory_get_usage();
-    echoResults($time_end - $time_start, $memory_end - $memory_start);
+    $measurement->stop();
+    echoResults($measurement);
 } else {
-    echoResults(null, null);
+    echoResults();
 }
 
+
+
 echoHeader(CASE_SET, count($arraysOf) * REPETITIONS_SET, CASE_SET_1);
-echoResults(null, null);
+echoResults();
+
+
 
 echoHeader(CASE_SET, count($arraysOf) * REPETITIONS_SET, CASE_SET_2);
-echoResults(null, null);
+echoResults();
+
+
 
 echoHeader(CASE_SET, count($arraysOf) * REPETITIONS_SET, CASE_SET_3);
-echoResults(null, null);
+echoResults();

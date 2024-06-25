@@ -10,16 +10,6 @@ require_once(ABS_PATH . '/core/functions.php');
 
 
 
-echo PHP_EOL;
-echo '-> PHP ver.: ' . PHP_VERSION . PHP_EOL;
-echo '-> Date: ' . date('Y-m-d H:i:s') . PHP_EOL;
-echo '-> The number of elements: ' . ELEMENTS_COUNT . PHP_EOL;
-echo '-> The number of get repetitions: ' . REPETITIONS_GET . PHP_EOL;
-echo '-> The number of set repetitions: ' . REPETITIONS_SET . PHP_EOL;
-echo PHP_EOL;
-
-
-
 // for memory init
 $info = valueOfInfo('test', 0);
 $time_start = $time_end = 0.0;

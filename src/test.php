@@ -3,7 +3,11 @@
 
 declare(strict_types=1);
 
-require_once('classes/StaticReport.php');
+const ABS_PATH = __DIR__;
+require_once(ABS_PATH . '/classes/Measurement.php');
+require_once(ABS_PATH . '/classes/StaticReport.php');
+
+
 
 // config
 const FAST_TEST = false;
@@ -23,15 +27,17 @@ const REPETITIONS_SET = FAST_TEST ? 100 : 5000;
 
 
 
-const ABS_PATH = __DIR__;
+echo PHP_EOL;
+echo '-> PHP ver.: ' . PHP_VERSION . PHP_EOL;
+echo '-> Date: ' . date('Y-m-d H:i:s') . PHP_EOL;
+echo '-> The number of elements: ' . ELEMENTS_COUNT . PHP_EOL;
+echo '-> The number of get repetitions: ' . REPETITIONS_GET . PHP_EOL;
+echo '-> The number of set repetitions: ' . REPETITIONS_SET . PHP_EOL;
+echo PHP_EOL;
 
-
-
-$tests_time_start = microtime(true);
-$tests_memory_start = memory_get_usage();
+($allTestsMeasurement = new Measurement())->start();
 require_once('core/tests.php');
-$tests_memory_end = memory_get_usage();
-$tests_time_end = microtime(true);
+$allTestsMeasurement->stop();
 
 echo PHP_EOL . PHP_EOL . PHP_EOL;
 if (is_int(RESULTS_FORMAT)) {
@@ -39,11 +45,11 @@ if (is_int(RESULTS_FORMAT)) {
     echo '-> The number of elements: ' . ELEMENTS_COUNT . PHP_EOL;
     echo '-> The number of get repetitions: ' . REPETITIONS_GET . PHP_EOL;
     echo '-> The number of set repetitions: ' . REPETITIONS_SET . PHP_EOL;
-    echo '-> Time taken (in seconds) by all tests: ' . ($tests_time_end - $tests_time_start) . PHP_EOL;
-    echo '-> Memory used (in bytes) by all tests: ' . ($tests_memory_end - $tests_memory_start) . PHP_EOL;
+    echo '-> Time taken (in seconds) by all tests: ' . $allTestsMeasurement->getTimeTaken() . PHP_EOL;
+    echo '-> Memory used (in bytes) by all tests: ' . $allTestsMeasurement->getMemoryUsed() . PHP_EOL;
     echo PHP_EOL;
     StaticReport::printResult(RESULTS_FORMAT, RESULTS_LAYOUT);
 } else {
-    echo '-> Time taken (in seconds) by all tests: ' . ($tests_time_end - $tests_time_start) . PHP_EOL;
-    echo '-> Memory used (in bytes) by all tests: ' . ($tests_memory_end - $tests_memory_start) . PHP_EOL;
+    echo '-> Time taken (in seconds) by all tests: ' . $allTestsMeasurement->getTimeTaken() . PHP_EOL;
+    echo '-> Memory used (in bytes) by all tests: ' . $allTestsMeasurement->getMemoryUsed() . PHP_EOL;
 }
