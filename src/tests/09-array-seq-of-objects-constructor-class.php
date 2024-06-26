@@ -218,3 +218,7 @@ for ($i = 0; $i < REPETITIONS_SET; $i++) {
 }
 $measurement->stop();
 echoResults($measurement);
+
+
+
+unset($arraysOf);

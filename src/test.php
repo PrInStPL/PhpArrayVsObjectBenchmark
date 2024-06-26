@@ -53,3 +53,4 @@ if (is_int(RESULTS_FORMAT)) {
     echo '-> Time taken (in seconds) by all tests: ' . $allTestsMeasurement->getTimeTaken() . PHP_EOL;
     echo '-> Memory used (in bytes) by all tests: ' . $allTestsMeasurement->getMemoryUsed() . PHP_EOL;
 }
+
