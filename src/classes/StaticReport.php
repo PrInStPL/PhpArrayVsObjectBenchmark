@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+if (!defined('ABS_PATH')) {
+    exit('You have to run main test file!');
+}
+
 /**
  * For printing and saving table of test results
  */
@@ -82,9 +86,9 @@ abstract class StaticReport
      * @param int  $format
      * @param int  $layout
      *
-     * @return void
+     * @return string
      */
-    public static function printResult(int $format = self::PRINT_CSV, int $layout = self::LAYOUT_SECTIONS_LEFT): void {
+    protected static function prepareResult(int $format = self::PRINT_CSV, int $layout = self::LAYOUT_SECTIONS_LEFT): string {
         $includedResultTypes = [
             self::RESULT_TYPE_TIME,
             self::RESULT_TYPE_MEMORY,
@@ -229,6 +233,26 @@ abstract class StaticReport
             throw new InvalidArgumentException('Incorrect format. Use class PRINT_* constant.');
         }
 
-        echo $data;
+        return $data;
+    }
+
+    public static function printResult(int $format = self::PRINT_CSV, int $layout = self::LAYOUT_SECTIONS_LEFT): void
+    {
+        echo self::prepareResult($format, $layout);
+    }
+
+    public static function saveResult(
+        string $fileName,
+        int    $format = self::PRINT_CSV,
+        int    $layout = self::LAYOUT_SECTIONS_LEFT
+    ): void {
+        if ($fileName[0] !== DIRECTORY_SEPARATOR) {
+            $fileName = DIRECTORY_SEPARATOR . $fileName;
+        }
+
+        file_put_contents(
+            ABS_PATH . $fileName,
+            self::prepareResult($format, $layout)
+        );
     }
 }
