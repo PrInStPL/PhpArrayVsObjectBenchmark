@@ -40,7 +40,7 @@ use const PhpArrayVsObjectBenchmark\{
 };
 
 if (80200 <= PHP_VERSION_ID) {
-    require_once(ABS_PATH . '/classes/ReadonlyConstructorClass.php');
+    require_once(ABS_PATH . '/Classes/ReadonlyConstructorClass.php');
 }
 
 // # # # # # # # # # # # # # # # # # # # #

@@ -40,7 +40,7 @@ echo '-> The number of set repetitions: ' . REPETITIONS_SET . PHP_EOL;
 echo PHP_EOL;
 
 ($allTestsMeasurement = new Measurement())->start();
-require_once('core/tests.php');
+require_once('Core/tests.php');
 $allTestsMeasurement->stop();
 
 echo PHP_EOL . PHP_EOL . PHP_EOL;
