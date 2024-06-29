@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-if (!defined('ABS_PATH')) {
-    exit('You have to run main test file!');
-}
+namespace PhpArrayVsObjectBenchmark\Classes;
+
+use InvalidArgumentException;
 
 /**
  * For printing and saving table of test results
@@ -236,11 +236,24 @@ abstract class StaticReport
         return $data;
     }
 
+    /**
+     * @param int $format
+     * @param int $layout
+     *
+     * @return void
+     */
     public static function printResult(int $format = self::PRINT_CSV, int $layout = self::LAYOUT_SECTIONS_LEFT): void
     {
         echo self::prepareResult($format, $layout);
     }
 
+    /**
+     * @param string $fileName
+     * @param int    $format
+     * @param int    $layout
+     *
+     * @return void
+     */
     public static function saveResult(
         string $fileName,
         int    $format = self::PRINT_CSV,
@@ -254,5 +267,13 @@ abstract class StaticReport
             ABS_PATH . $fileName,
             self::prepareResult($format, $layout)
         );
+    }
+
+    /**
+     * @return void
+     */
+    public static function clearResults(): void
+    {
+        self::$results = [];
     }
 }

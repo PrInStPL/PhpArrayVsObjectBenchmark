@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-if (!defined('ABS_PATH')) {
-    exit('You have to run main test file!');
-}
-
-require_once(ABS_PATH . '/classes/AbstractSingleGetterClass.php');
+namespace PhpArrayVsObjectBenchmark\Classes;
 
 abstract class AbstractMultiGetterClass extends AbstractSingleGetterClass {
+    /**
+     * @return non-empty-list<int|string|null>
+     */
     public function getAll(): array
     {
         return [

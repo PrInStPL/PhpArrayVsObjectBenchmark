@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-if (!defined('ABS_PATH')) {
-    exit('You have to run main test file!');
-}
-
-require_once(ABS_PATH . '/core/constants.php');
-require_once(ABS_PATH . '/core/functions.php');
-require_once(ABS_PATH . '/classes/PlainClass.php');
+namespace PhpArrayVsObjectBenchmark\Classes;
 
 class SetterMultipleClass extends PlainClass {
+    /**
+     * @param string|null $info
+     * @param string|null $first
+     * @param int|null    $second
+     *
+     * @return void
+     */
     public function set(
         ?string $info = null,
         ?string $first = null,

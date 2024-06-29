@@ -3,14 +3,18 @@
 
 declare(strict_types=1);
 
+namespace PhpArrayVsObjectBenchmark;
+
 const ABS_PATH = __DIR__;
-require_once(ABS_PATH . '/classes/Measurement.php');
-require_once(ABS_PATH . '/classes/StaticReport.php');
+require_once('__autoload.php');
+
+use PhpArrayVsObjectBenchmark\Classes\Measurement;
+use PhpArrayVsObjectBenchmark\Classes\StaticReport;
 
 
 
 // config
-const FAST_TEST = false;
+const FAST_TEST = true;
 const ECHO_NUMBERS_ONLY = false;
 /** @const ?int RESULTS_FORMAT Use: StaticReport::PRINT_CSV | StaticReport::PRINT_CLI */
 const RESULTS_FORMAT = StaticReport::PRINT_CLI;

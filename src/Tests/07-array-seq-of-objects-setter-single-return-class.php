@@ -4,17 +4,44 @@
 
 declare(strict_types=1);
 
-if (!defined('ABS_PATH')) {
-    exit('You have to run main test file!');
-}
+namespace PhpArrayVsObjectBenchmark\Tests;
 
-require_once(ABS_PATH . '/core/constants.php');
-require_once(ABS_PATH . '/core/functions.php');
-require_once(ABS_PATH . '/classes/Measurement.php');
-require_once(ABS_PATH . '/classes/SetterSingleVoidClass.php');
+require_once(ABS_PATH . '/Core/constants.php');
+require_once(ABS_PATH . '/Core/functions.php');
+
+use PhpArrayVsObjectBenchmark\Classes\Measurement;
+use PhpArrayVsObjectBenchmark\Classes\SetterSingleReturnClass;
+use function PhpArrayVsObjectBenchmark\Core\ {
+    echoHeader,
+    echoResults,
+    echoSection,
+    valueOfInfo,
+    valueOfFirst,
+};
+use const PhpArrayVsObjectBenchmark\{
+    ELEMENTS_COUNT,
+    REPETITIONS_GET,
+    REPETITIONS_SET,
+    Core\CASE_CREATE,
+    Core\CASE_GET,
+    Core\CASE_GET_1,
+    Core\CASE_GET_2,
+    Core\CASE_GET_3,
+    Core\CASE_GET_4,
+    Core\CASE_GET_5,
+    Core\CASE_GET_6,
+    Core\CASE_GET_7,
+    Core\CASE_GET_8,
+    Core\CASE_SET,
+    Core\CASE_SET_1,
+    Core\CASE_SET_2,
+    Core\CASE_SET_3,
+    Core\CASE_SET_4,
+};
 
 # # # # # # # # # # # # # # # # # # # #
-echoSection('Array (seq) of objects (SetterSingleVoidClass)');
+
+echoSection('Array (seq) of objects (SetterSingleReturnClass)');
 $measurement = new Measurement();
 
 
@@ -22,13 +49,14 @@ $measurement = new Measurement();
 echoHeader(CASE_CREATE, ELEMENTS_COUNT);
 unset($arraysOf, $element);
 $measurement->start();
-/** @var SetterSingleVoidClass[] $arraysOf */
+/** @var SetterSingleReturnClass[] $arraysOf */
 $arraysOf = [];
 for ($i = 0; $i < ELEMENTS_COUNT; $i++) {
-    $element = new SetterSingleVoidClass();
-    $element->setInfo(valueOfInfo(CASE_CREATE, $i));
-    $element->setFirst(valueOfFirst($i));
-    $element->setSecond($i);
+    $element = (new SetterSingleReturnClass())
+        ->setInfo(valueOfInfo(CASE_CREATE, $i))
+        ->setFirst(valueOfFirst($i))
+        ->setSecond($i)
+    ;
     $arraysOf[] = $element;
 }
 $measurement->stop();
@@ -157,9 +185,11 @@ unset($key, $element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     foreach ($arraysOf as $key => $element) {
-        $arraysOf[$key]->setInfo(valueOfInfo(CASE_SET_1, $i));
-        $arraysOf[$key]->setFirst(valueOfFirst($i));
-        $arraysOf[$key]->setSecond($i);
+        $arraysOf[$key]
+            ->setInfo(valueOfInfo(CASE_SET_1, $i))
+            ->setFirst(valueOfFirst($i))
+            ->setSecond($i)
+        ;
     }
 }
 $measurement->stop();
@@ -172,9 +202,11 @@ unset($key, $element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     foreach ($arraysOf as $key => &$element) {
-        $element->setInfo(valueOfInfo(CASE_SET_2, $i));
-        $element->setFirst(valueOfFirst($i));
-        $element->setSecond($i);
+        $element
+            ->setInfo(valueOfInfo(CASE_SET_2, $i))
+            ->setFirst(valueOfFirst($i))
+            ->setSecond($i)
+        ;
     }
 }
 $measurement->stop();
@@ -186,11 +218,13 @@ echoHeader(CASE_SET, count($arraysOf) * REPETITIONS_SET, CASE_SET_3);
 unset($element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
-    array_map(
-        function(SetterSingleVoidClass $element) use ($i): SetterSingleVoidClass {
-            $element->setInfo(valueOfInfo(CASE_SET_3, $i));
-            $element->setFirst(valueOfFirst($i));
-            $element->setSecond($i);
+    $arraysOf = array_map(
+        function(SetterSingleReturnClass $element) use ($i): SetterSingleReturnClass {
+            $element
+                ->setInfo(valueOfInfo(CASE_SET_3, $i))
+                ->setFirst(valueOfFirst($i))
+                ->setSecond($i)
+            ;
             return $element;
         },
         $arraysOf
@@ -207,10 +241,12 @@ $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     array_walk(
         $arraysOf,
-        function(SetterSingleVoidClass &$element) use ($i): bool {
-            $element->setInfo(valueOfInfo(CASE_SET_4, $i));
-            $element->setFirst(valueOfFirst($i));
-            $element->setSecond($i);
+        function(SetterSingleReturnClass &$element) use ($i): bool {
+            $element
+                ->setInfo(valueOfInfo(CASE_SET_4, $i))
+                ->setFirst(valueOfFirst($i))
+                ->setSecond($i)
+            ;
             return true;
         }
     );

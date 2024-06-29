@@ -2,11 +2,7 @@
 
 declare(strict_types=1);
 
-if (!defined('ABS_PATH')) {
-    exit('You have to run main test file!');
-}
-
-require_once(ABS_PATH . '/traits/SingleGettersTrait.php');
+namespace PhpArrayVsObjectBenchmark\Traits;
 
 trait MultiGetterTrait {
     use SingleGettersTrait;

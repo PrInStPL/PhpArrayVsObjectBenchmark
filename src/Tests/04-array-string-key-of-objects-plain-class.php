@@ -4,17 +4,44 @@
 
 declare(strict_types=1);
 
-if (!defined('ABS_PATH')) {
-    exit('You have to run main test file!');
-}
+namespace PhpArrayVsObjectBenchmark\Tests;
 
-require_once(ABS_PATH . '/core/constants.php');
-require_once(ABS_PATH . '/core/functions.php');
-require_once(ABS_PATH . '/classes/Measurement.php');
-require_once(ABS_PATH . '/classes/SetterMultipleClass.php');
+require_once(ABS_PATH . '/Core/constants.php');
+require_once(ABS_PATH . '/Core/functions.php');
 
-# # # # # # # # # # # # # # # # # # # #
-echoSection('Array (seq) of objects (SetterMultipleClass)');
+use PhpArrayVsObjectBenchmark\Classes\Measurement;
+use PhpArrayVsObjectBenchmark\Classes\PlainClass;
+use function PhpArrayVsObjectBenchmark\Core\ {
+    echoHeader,
+    echoResults,
+    echoSection,
+    valueOfInfo,
+    valueOfFirst,
+};
+use const PhpArrayVsObjectBenchmark\{
+    ELEMENTS_COUNT,
+    REPETITIONS_GET,
+    REPETITIONS_SET,
+    Core\CASE_CREATE,
+    Core\CASE_GET,
+    Core\CASE_GET_1,
+    Core\CASE_GET_2,
+    Core\CASE_GET_3,
+    Core\CASE_GET_4,
+    Core\CASE_GET_5,
+    Core\CASE_GET_6,
+    Core\CASE_GET_7,
+    Core\CASE_GET_8,
+    Core\CASE_SET,
+    Core\CASE_SET_1,
+    Core\CASE_SET_2,
+    Core\CASE_SET_3,
+    Core\CASE_SET_4,
+};
+
+// # # # # # # # # # # # # # # # # # # # #
+
+echoSection('Array (string key) of objects (PlainClass)');
 $measurement = new Measurement();
 
 
@@ -22,17 +49,17 @@ $measurement = new Measurement();
 echoHeader(CASE_CREATE, ELEMENTS_COUNT);
 unset($arraysOf, $element);
 $measurement->start();
-/** @var SetterMultipleClass[] $arraysOf */
+/** @var array<non-empty-string, PlainClass> $arraysOf */
 $arraysOf = [];
 for ($i = 0; $i < ELEMENTS_COUNT; $i++) {
-    $element = new SetterMultipleClass();
-    $element->set(
-        valueOfInfo(CASE_CREATE, $i),
-        valueOfFirst($i),
-        $i
-    );
-    $arraysOf[] = $element;
+    $valueInfo = valueOfInfo(CASE_CREATE, $i);
+    $element = new PlainClass();
+    $element->info = $valueInfo;
+    $element->first = valueOfFirst($i);
+    $element->second = $i;
+    $arraysOf[$valueInfo] = $element;
 }
+unset($valueInfo);
 $measurement->stop();
 echoResults($measurement);
 
@@ -159,11 +186,9 @@ unset($key, $element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     foreach ($arraysOf as $key => $element) {
-        $arraysOf[$key]->set(
-            valueOfInfo(CASE_SET_1, $i),
-            valueOfFirst($i),
-            $i
-        );
+        $arraysOf[$key]->info = valueOfInfo(CASE_SET_1, $i);
+        $arraysOf[$key]->first = valueOfFirst($i);
+        $arraysOf[$key]->second = $i;
     }
 }
 $measurement->stop();
@@ -176,11 +201,9 @@ unset($key, $element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     foreach ($arraysOf as $key => &$element) {
-        $element->set(
-            valueOfInfo(CASE_SET_2, $i),
-            valueOfFirst($i),
-            $i
-        );
+        $element->info = valueOfInfo(CASE_SET_2, $i);
+        $element->first = valueOfFirst($i);
+        $element->second = $i;
     }
 }
 $measurement->stop();
@@ -193,12 +216,10 @@ unset($element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     $arraysOf = array_map(
-        function(SetterMultipleClass $element) use ($i): SetterMultipleClass {
-            $element->set(
-                valueOfInfo(CASE_SET_3, $i),
-                valueOfFirst($i),
-                $i
-            );
+        function(PlainClass $element) use ($i): PlainClass {
+            $element->info = valueOfInfo(CASE_SET_3, $i);
+            $element->first = valueOfFirst($i);
+            $element->second = $i;
             return $element;
         },
         $arraysOf
@@ -215,12 +236,10 @@ $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     array_walk(
         $arraysOf,
-        function(SetterMultipleClass &$element) use ($i): bool {
-            $element->set(
-                valueOfInfo(CASE_SET_4, $i),
-                valueOfFirst($i),
-                $i
-            );
+        function(PlainClass &$element) use ($i): bool {
+            $element->info = valueOfInfo(CASE_SET_4, $i);
+            $element->first = valueOfFirst($i);
+            $element->second = $i;
             return true;
         }
     );

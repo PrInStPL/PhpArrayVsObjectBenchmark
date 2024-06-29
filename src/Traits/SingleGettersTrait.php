@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace PhpArrayVsObjectBenchmark\Traits;
+
 trait SingleGettersTrait {
     public function getInfoByTrait(): ?string
     {

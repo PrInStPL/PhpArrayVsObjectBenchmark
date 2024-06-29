@@ -3,16 +3,43 @@
 
 declare(strict_types=1);
 
-if (!defined('ABS_PATH')) {
-    exit('You have to run main test file!');
-}
+namespace PhpArrayVsObjectBenchmark\Tests;
 
-require_once(ABS_PATH . '/core/constants.php');
-require_once(ABS_PATH . '/core/functions.php');
-require_once(ABS_PATH . '/classes/Measurement.php');
+require_once(ABS_PATH . '/Core/constants.php');
+require_once(ABS_PATH . '/Core/functions.php');
+
+use PhpArrayVsObjectBenchmark\Classes\Measurement;
+use function PhpArrayVsObjectBenchmark\Core\ {
+    echoHeader,
+    echoResults,
+    echoSection,
+    valueOfInfo,
+    valueOfFirst,
+};
+use const PhpArrayVsObjectBenchmark\{
+    ELEMENTS_COUNT,
+    REPETITIONS_GET,
+    REPETITIONS_SET,
+    Core\CASE_CREATE,
+    Core\CASE_GET,
+    Core\CASE_GET_1,
+    Core\CASE_GET_2,
+    Core\CASE_GET_3,
+    Core\CASE_GET_4,
+    Core\CASE_GET_5,
+    Core\CASE_GET_6,
+    Core\CASE_GET_7,
+    Core\CASE_GET_8,
+    Core\CASE_SET,
+    Core\CASE_SET_1,
+    Core\CASE_SET_2,
+    Core\CASE_SET_3,
+    Core\CASE_SET_4,
+};
 
 # # # # # # # # # # # # # # # # # # # #
-echoSection('Array (string key) of arrays');
+
+echoSection('Array (seq) of arrays');
 $measurement = new Measurement();
 
 
@@ -22,14 +49,12 @@ unset($arraysOf, $element);
 $measurement->start();
 $arraysOf = [];
 for ($i = 0; $i < ELEMENTS_COUNT; $i++) {
-    $valueInfo = valueOfInfo(CASE_CREATE, $i);
-    $arraysOf[$valueInfo] = [
-        $valueInfo,
+    $arraysOf[] = [
+        valueOfInfo(CASE_CREATE, $i),
         valueOfFirst($i),
-        $i,
+        $i
     ];
 }
-unset($valueInfo);
 $measurement->stop();
 echoResults($measurement);
 
@@ -71,7 +96,7 @@ echoResults();
 
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_6);
-unset($key, $element, $valueInfo, $valueFirst, $valueSecond);
+unset($element, $valueInfo, $valueFirst, $valueSecond);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_GET; $i++) {
     foreach ($arraysOf as $key => $element) {
@@ -86,7 +111,7 @@ echoResults($measurement);
 
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_7);
-unset($key, $element, $valueInfo, $valueFirst, $valueSecond);
+unset($element, $valueInfo, $valueFirst, $valueSecond);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_GET; $i++) {
     foreach ($arraysOf as $key => $element) {
@@ -101,7 +126,7 @@ echoResults($measurement);
 
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_8);
-unset($key, $element, $valueInfo, $valueFirst, $valueSecond);
+unset($element, $valueInfo, $valueFirst, $valueSecond);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_GET; $i++) {
     foreach (array_keys($arraysOf) as $key) {
@@ -115,10 +140,8 @@ echoResults($measurement);
 
 
 
-$arraysOfCopy = $arraysOf;
-
 echoHeader(CASE_SET, count($arraysOf) * REPETITIONS_SET, CASE_SET_1);
-unset($key, $element);
+unset($element, $key);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     foreach ($arraysOf as $key => $element) {
@@ -133,7 +156,7 @@ echoResults($measurement);
 
 
 echoHeader(CASE_SET, count($arraysOf) * REPETITIONS_SET, CASE_SET_2);
-unset($key, $element);
+unset($element, $key);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     foreach ($arraysOf as $key => &$element) {
@@ -148,7 +171,7 @@ echoResults($measurement);
 
 
 echoHeader(CASE_SET, count($arraysOf) * REPETITIONS_SET, CASE_SET_3);
-unset($element, $valueInfo, $valueFirst, $valueSecond);
+unset($element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     $arraysOf = array_map(

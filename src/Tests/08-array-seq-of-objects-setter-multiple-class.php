@@ -1,20 +1,47 @@
-<?php /** @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection */
-/** @noinspection PhpArrayAccessCanBeReplacedWithForeachValueInspection */
+<?php /** @noinspection PhpArrayAccessCanBeReplacedWithForeachValueInspection */
+/** @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection */
 /** @noinspection DuplicatedCode */
 
 declare(strict_types=1);
 
-if (!defined('ABS_PATH')) {
-    exit('You have to run main test file!');
-}
+namespace PhpArrayVsObjectBenchmark\Tests;
 
-require_once(ABS_PATH . '/core/constants.php');
-require_once(ABS_PATH . '/core/functions.php');
-require_once(ABS_PATH . '/classes/Measurement.php');
-require_once(ABS_PATH . '/classes/ConstructorClass.php');
+require_once(ABS_PATH . '/Core/constants.php');
+require_once(ABS_PATH . '/Core/functions.php');
+
+use PhpArrayVsObjectBenchmark\Classes\Measurement;
+use PhpArrayVsObjectBenchmark\Classes\SetterMultipleClass;
+use function PhpArrayVsObjectBenchmark\Core\ {
+    echoHeader,
+    echoResults,
+    echoSection,
+    valueOfInfo,
+    valueOfFirst,
+};
+use const PhpArrayVsObjectBenchmark\{
+    ELEMENTS_COUNT,
+    REPETITIONS_GET,
+    REPETITIONS_SET,
+    Core\CASE_CREATE,
+    Core\CASE_GET,
+    Core\CASE_GET_1,
+    Core\CASE_GET_2,
+    Core\CASE_GET_3,
+    Core\CASE_GET_4,
+    Core\CASE_GET_5,
+    Core\CASE_GET_6,
+    Core\CASE_GET_7,
+    Core\CASE_GET_8,
+    Core\CASE_SET,
+    Core\CASE_SET_1,
+    Core\CASE_SET_2,
+    Core\CASE_SET_3,
+    Core\CASE_SET_4,
+};
 
 # # # # # # # # # # # # # # # # # # # #
-echoSection('Array (seq) of objects (ConstructorClass)');
+
+echoSection('Array (seq) of objects (SetterMultipleClass)');
 $measurement = new Measurement();
 
 
@@ -22,10 +49,11 @@ $measurement = new Measurement();
 echoHeader(CASE_CREATE, ELEMENTS_COUNT);
 unset($arraysOf, $element);
 $measurement->start();
-/** @var ConstructorClass[] $arraysOf */
+/** @var SetterMultipleClass[] $arraysOf */
 $arraysOf = [];
 for ($i = 0; $i < ELEMENTS_COUNT; $i++) {
-    $element = new ConstructorClass(
+    $element = new SetterMultipleClass();
+    $element->set(
         valueOfInfo(CASE_CREATE, $i),
         valueOfFirst($i),
         $i
@@ -158,9 +186,11 @@ unset($key, $element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     foreach ($arraysOf as $key => $element) {
-        $arraysOf[$key]->info = valueOfInfo(CASE_SET_1, $i);
-        $arraysOf[$key]->first = valueOfFirst($i);
-        $arraysOf[$key]->second = $i;
+        $arraysOf[$key]->set(
+            valueOfInfo(CASE_SET_1, $i),
+            valueOfFirst($i),
+            $i
+        );
     }
 }
 $measurement->stop();
@@ -173,9 +203,11 @@ unset($key, $element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     foreach ($arraysOf as $key => &$element) {
-        $element->info = valueOfInfo(CASE_SET_2, $i);
-        $element->first = valueOfFirst($i);
-        $element->second = $i;
+        $element->set(
+            valueOfInfo(CASE_SET_2, $i),
+            valueOfFirst($i),
+            $i
+        );
     }
 }
 $measurement->stop();
@@ -188,10 +220,12 @@ unset($element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     $arraysOf = array_map(
-        function(ConstructorClass $element) use ($i): ConstructorClass {
-            $element->info = valueOfInfo(CASE_SET_3, $i);
-            $element->first = valueOfFirst($i);
-            $element->second = $i;
+        function(SetterMultipleClass $element) use ($i): SetterMultipleClass {
+            $element->set(
+                valueOfInfo(CASE_SET_3, $i),
+                valueOfFirst($i),
+                $i
+            );
             return $element;
         },
         $arraysOf
@@ -208,17 +242,15 @@ $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     array_walk(
         $arraysOf,
-        function(ConstructorClass &$element) use ($i): bool {
-            $element->info = valueOfInfo(CASE_SET_4, $i);
-            $element->first = valueOfFirst($i);
-            $element->second = $i;
+        function(SetterMultipleClass &$element) use ($i): bool {
+            $element->set(
+                valueOfInfo(CASE_SET_4, $i),
+                valueOfFirst($i),
+                $i
+            );
             return true;
         }
     );
 }
 $measurement->stop();
 echoResults($measurement);
-
-
-
-unset($arraysOf);

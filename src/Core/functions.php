@@ -2,12 +2,16 @@
 
 declare(strict_types=1);
 
-if (!defined('ABS_PATH')) {
-    exit('You have to run main test file!');
-}
+namespace PhpArrayVsObjectBenchmark\Core;
 
-require_once(ABS_PATH . '/classes/Measurement.php');
-require_once(ABS_PATH . '/classes/StaticReport.php');
+require_once(ABS_PATH . '/Core/constants.php');
+
+use PhpArrayVsObjectBenchmark\classes\Measurement;
+use PhpArrayVsObjectBenchmark\classes\StaticReport;
+use const PhpArrayVsObjectBenchmark\ABS_PATH;
+use const PhpArrayVsObjectBenchmark\ECHO_NUMBERS_ONLY;
+
+
 
 /**
  * For unify values
@@ -17,7 +21,8 @@ require_once(ABS_PATH . '/classes/StaticReport.php');
  *
  * @return string
  */
-function valueOfInfo(string $case, int $i): string {
+function valueOfInfo(string $case, int $i): string
+{
     return "Some $i information in $i $case repetition";
 }
 
@@ -28,7 +33,8 @@ function valueOfInfo(string $case, int $i): string {
  *
  * @return string
  */
-function valueOfFirst(int $i): string {
+function valueOfFirst(int $i): string
+{
     return sprintf('%015d', $i);
 }
 
@@ -37,7 +43,8 @@ function valueOfFirst(int $i): string {
  *
  * @return void
  */
-function echoSection(string $info): void {
+function echoSection(string $info): void
+{
     echo PHP_EOL . (ECHO_NUMBERS_ONLY ? '' : '########## ') . $info . (ECHO_NUMBERS_ONLY ? '' : ' ##########') . PHP_EOL;
 
     StaticReport::addSection($info);
@@ -50,7 +57,8 @@ function echoSection(string $info): void {
  *
  * @return void
  */
-function echoHeader(string $name, int $repetitions, string $info = ''): void {
+function echoHeader(string $name, int $repetitions, string $info = ''): void
+{
     $nameInfo = $name . (empty($info) ? '' : " ($info)");
     $repetitions = number_format($repetitions, 0, '', ' ');
 
@@ -60,8 +68,7 @@ function echoHeader(string $name, int $repetitions, string $info = ''): void {
             : "-> $nameInfo repetitions: "
         )
         . $repetitions
-        . PHP_EOL
-    ;
+        . PHP_EOL;
 
     StaticReport::addHeader($nameInfo);
     StaticReport::addResult(StaticReport::RESULT_TYPE_REPETITION, $repetitions);
@@ -72,13 +79,13 @@ function echoHeader(string $name, int $repetitions, string $info = ''): void {
  *
  * @return void
  */
-function echoResults(?Measurement $stat = null): void {
+function echoResults(?Measurement $stat = null): void
+{
     $time = $stat ? (string) $stat->getTimeTaken() : null;
     $memory = $stat ? number_format($stat->getMemoryUsed(), 0, '', ' ') : null;
 
     echo (ECHO_NUMBERS_ONLY ? '' : 'Time taken (seconds): ') . $time . PHP_EOL
-        . (ECHO_NUMBERS_ONLY ? '' : 'Memory used (bytes): ') . $memory . PHP_EOL
-    ;
+        . (ECHO_NUMBERS_ONLY ? '' : 'Memory used (bytes): ') . $memory . PHP_EOL;
 
     StaticReport::addResult(StaticReport::RESULT_TYPE_TIME, $time);
     StaticReport::addResult(StaticReport::RESULT_TYPE_MEMORY, $memory);

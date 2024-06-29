@@ -2,11 +2,9 @@
 
 declare(strict_types=1);
 
-if (!defined('ABS_PATH')) {
-    exit('You have to run main test file!');
-}
+namespace PhpArrayVsObjectBenchmark\Core;
 
-require_once(ABS_PATH . '/core/functions.php');
+require_once(ABS_PATH . '/Core/functions.php');
 
 
 

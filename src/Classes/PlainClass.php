@@ -2,12 +2,9 @@
 
 declare(strict_types=1);
 
-if (!defined('ABS_PATH')) {
-    exit('You have to run main test file!');
-}
+namespace PhpArrayVsObjectBenchmark\Classes;
 
-require_once(ABS_PATH . '/traits/MultiGetterTrait.php');
-require_once(ABS_PATH . '/classes/AbstractMultiGetterClass.php');
+use PhpArrayVsObjectBenchmark\Traits\MultiGetterTrait;
 
 class PlainClass extends AbstractMultiGetterClass {
     use MultiGetterTrait;
