@@ -10,7 +10,7 @@ require_once(ABS_PATH . '/Core/constants.php');
 require_once(ABS_PATH . '/Core/functions.php');
 
 use PhpArrayVsObjectBenchmark\Classes\Measurement;
-use PhpArrayVsObjectBenchmark\Classes\SetterSingleVoidClass;
+use PhpArrayVsObjectBenchmark\Classes\SetterSingleNoReturnDefClass;
 use function PhpArrayVsObjectBenchmark\Core\ {
     echoHeader,
     echoResults,
@@ -40,8 +40,11 @@ use const PhpArrayVsObjectBenchmark\{
 };
 
 # # # # # # # # # # # # # # # # # # # #
+$classInit = new SetterSingleNoReturnDefClass();
+unset($classInit);
+// # # # # # # # # # # # # # # # # # # # #
 
-echoSection('Array (seq) of objects (SetterSingleVoidClass)');
+echoSection('Array (seq) of objects (SetterSingleNoReturnDefClass)');
 $measurement = new Measurement();
 
 
@@ -49,10 +52,10 @@ $measurement = new Measurement();
 echoHeader(CASE_CREATE, ELEMENTS_COUNT);
 unset($arraysOf, $element);
 $measurement->start();
-/** @var SetterSingleVoidClass[] $arraysOf */
+/** @var SetterSingleNoReturnDefClass[] $arraysOf */
 $arraysOf = [];
 for ($i = 0; $i < ELEMENTS_COUNT; $i++) {
-    $element = new SetterSingleVoidClass();
+    $element = new SetterSingleNoReturnDefClass();
     $element->setInfo(valueOfInfo(CASE_CREATE, $i));
     $element->setFirst(valueOfFirst($i));
     $element->setSecond($i);
@@ -214,7 +217,7 @@ unset($element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     array_map(
-        function(SetterSingleVoidClass $element) use ($i): SetterSingleVoidClass {
+        function(SetterSingleNoReturnDefClass $element) use ($i): SetterSingleNoReturnDefClass {
             $element->setInfo(valueOfInfo(CASE_SET_3, $i));
             $element->setFirst(valueOfFirst($i));
             $element->setSecond($i);
@@ -234,7 +237,7 @@ $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     array_walk(
         $arraysOf,
-        function(SetterSingleVoidClass &$element) use ($i): bool {
+        function(SetterSingleNoReturnDefClass &$element) use ($i): bool {
             $element->setInfo(valueOfInfo(CASE_SET_4, $i));
             $element->setFirst(valueOfFirst($i));
             $element->setSecond($i);

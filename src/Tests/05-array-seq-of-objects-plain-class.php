@@ -1,5 +1,5 @@
-<?php /** @noinspection PhpArrayAccessCanBeReplacedWithForeachValueInspection */
-/** @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection */
+<?php /** @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection */
+/** @noinspection PhpArrayAccessCanBeReplacedWithForeachValueInspection */
 /** @noinspection DuplicatedCode */
 
 declare(strict_types=1);
@@ -10,7 +10,7 @@ require_once(ABS_PATH . '/Core/constants.php');
 require_once(ABS_PATH . '/Core/functions.php');
 
 use PhpArrayVsObjectBenchmark\Classes\Measurement;
-use PhpArrayVsObjectBenchmark\Classes\SetterSingleReturnClass;
+use PhpArrayVsObjectBenchmark\Classes\PlainClass;
 use function PhpArrayVsObjectBenchmark\Core\ {
     echoHeader,
     echoResults,
@@ -39,9 +39,12 @@ use const PhpArrayVsObjectBenchmark\{
     Core\CASE_SET_4,
 };
 
-# # # # # # # # # # # # # # # # # # # #
+// # # # # # # # # # # # # # # # # # # # #
+$classInit = new PlainClass();
+unset($classInit);
+// # # # # # # # # # # # # # # # # # # # #
 
-echoSection('Array (seq) of objects (SetterSingleReturnClass)');
+echoSection('Array (seq) of objects (PlainClass)');
 $measurement = new Measurement();
 
 
@@ -49,14 +52,13 @@ $measurement = new Measurement();
 echoHeader(CASE_CREATE, ELEMENTS_COUNT);
 unset($arraysOf, $element);
 $measurement->start();
-/** @var SetterSingleReturnClass[] $arraysOf */
+/** @var PlainClass[] $arraysOf */
 $arraysOf = [];
 for ($i = 0; $i < ELEMENTS_COUNT; $i++) {
-    $element = (new SetterSingleReturnClass())
-        ->setInfo(valueOfInfo(CASE_CREATE, $i))
-        ->setFirst(valueOfFirst($i))
-        ->setSecond($i)
-    ;
+    $element = new PlainClass();
+    $element->info = valueOfInfo(CASE_CREATE, $i);
+    $element->first = valueOfFirst($i);
+    $element->second = $i;
     $arraysOf[] = $element;
 }
 $measurement->stop();
@@ -185,11 +187,9 @@ unset($key, $element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     foreach ($arraysOf as $key => $element) {
-        $arraysOf[$key]
-            ->setInfo(valueOfInfo(CASE_SET_1, $i))
-            ->setFirst(valueOfFirst($i))
-            ->setSecond($i)
-        ;
+        $arraysOf[$key]->info = valueOfInfo(CASE_SET_1, $i);
+        $arraysOf[$key]->first = valueOfFirst($i);
+        $arraysOf[$key]->second = $i;
     }
 }
 $measurement->stop();
@@ -202,11 +202,9 @@ unset($key, $element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     foreach ($arraysOf as $key => &$element) {
-        $element
-            ->setInfo(valueOfInfo(CASE_SET_2, $i))
-            ->setFirst(valueOfFirst($i))
-            ->setSecond($i)
-        ;
+        $element->info = valueOfInfo(CASE_SET_2, $i);
+        $element->first = valueOfFirst($i);
+        $element->second = $i;
     }
 }
 $measurement->stop();
@@ -218,13 +216,11 @@ echoHeader(CASE_SET, count($arraysOf) * REPETITIONS_SET, CASE_SET_3);
 unset($element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
-    $arraysOf = array_map(
-        function(SetterSingleReturnClass $element) use ($i): SetterSingleReturnClass {
-            $element
-                ->setInfo(valueOfInfo(CASE_SET_3, $i))
-                ->setFirst(valueOfFirst($i))
-                ->setSecond($i)
-            ;
+    array_map(
+        function(PlainClass $element) use ($i): PlainClass {
+            $element->info = valueOfInfo(CASE_SET_3, $i);
+            $element->first = valueOfFirst($i);
+            $element->second = $i;
             return $element;
         },
         $arraysOf
@@ -241,12 +237,10 @@ $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     array_walk(
         $arraysOf,
-        function(SetterSingleReturnClass &$element) use ($i): bool {
-            $element
-                ->setInfo(valueOfInfo(CASE_SET_4, $i))
-                ->setFirst(valueOfFirst($i))
-                ->setSecond($i)
-            ;
+        function(PlainClass &$element) use ($i): bool {
+            $element->info = valueOfInfo(CASE_SET_4, $i);
+            $element->first = valueOfFirst($i);
+            $element->second = $i;
             return true;
         }
     );

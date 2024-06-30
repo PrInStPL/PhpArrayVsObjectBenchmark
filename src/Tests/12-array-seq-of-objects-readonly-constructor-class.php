@@ -44,6 +44,9 @@ if (80200 <= PHP_VERSION_ID) {
 }
 
 // # # # # # # # # # # # # # # # # # # # #
+$classInit = new ReadonlyConstructorClass();
+unset($classInit);
+// # # # # # # # # # # # # # # # # # # # #
 
 echoSection('Array (seq) of objects (ReadonlyConstructorClass)');
 $measurement = new Measurement();

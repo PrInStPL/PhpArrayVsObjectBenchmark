@@ -1,5 +1,5 @@
-<?php /** @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection */
-/** @noinspection PhpArrayAccessCanBeReplacedWithForeachValueInspection */
+<?php /** @noinspection PhpArrayAccessCanBeReplacedWithForeachValueInspection */
+/** @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection */
 /** @noinspection DuplicatedCode */
 
 declare(strict_types=1);
@@ -40,8 +40,11 @@ use const PhpArrayVsObjectBenchmark\{
 };
 
 // # # # # # # # # # # # # # # # # # # # #
+$classInit = new PlainClass();
+unset($classInit);
+// # # # # # # # # # # # # # # # # # # # #
 
-echoSection('Array (seq) of objects (PlainClass)');
+echoSection('Array (string key) of objects (PlainClass)');
 $measurement = new Measurement();
 
 
@@ -49,15 +52,17 @@ $measurement = new Measurement();
 echoHeader(CASE_CREATE, ELEMENTS_COUNT);
 unset($arraysOf, $element);
 $measurement->start();
-/** @var PlainClass[] $arraysOf */
+/** @var array<non-empty-string, PlainClass> $arraysOf */
 $arraysOf = [];
 for ($i = 0; $i < ELEMENTS_COUNT; $i++) {
+    $valueInfo = valueOfInfo(CASE_CREATE, $i);
     $element = new PlainClass();
-    $element->info = valueOfInfo(CASE_CREATE, $i);
+    $element->info = $valueInfo;
     $element->first = valueOfFirst($i);
     $element->second = $i;
-    $arraysOf[] = $element;
+    $arraysOf[$valueInfo] = $element;
 }
+unset($valueInfo);
 $measurement->stop();
 echoResults($measurement);
 
@@ -213,7 +218,7 @@ echoHeader(CASE_SET, count($arraysOf) * REPETITIONS_SET, CASE_SET_3);
 unset($element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
-    array_map(
+    $arraysOf = array_map(
         function(PlainClass $element) use ($i): PlainClass {
             $element->info = valueOfInfo(CASE_SET_3, $i);
             $element->first = valueOfFirst($i);

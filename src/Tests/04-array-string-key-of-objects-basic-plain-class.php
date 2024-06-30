@@ -1,5 +1,5 @@
-<?php /** @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection */
-/** @noinspection PhpArrayAccessCanBeReplacedWithForeachValueInspection */
+<?php /** @noinspection PhpArrayAccessCanBeReplacedWithForeachValueInspection */
+/** @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection */
 /** @noinspection DuplicatedCode */
 
 declare(strict_types=1);
@@ -9,8 +9,8 @@ namespace PhpArrayVsObjectBenchmark\Tests;
 require_once(ABS_PATH . '/Core/constants.php');
 require_once(ABS_PATH . '/Core/functions.php');
 
-use PhpArrayVsObjectBenchmark\Classes\ConstructorClass;
 use PhpArrayVsObjectBenchmark\Classes\Measurement;
+use PhpArrayVsObjectBenchmark\Classes\BasicPlainClass;
 use function PhpArrayVsObjectBenchmark\Core\ {
     echoHeader,
     echoResults,
@@ -39,9 +39,12 @@ use const PhpArrayVsObjectBenchmark\{
     Core\CASE_SET_4,
 };
 
-# # # # # # # # # # # # # # # # # # # #
+// # # # # # # # # # # # # # # # # # # # #
+$classInit = new BasicPlainClass();
+unset($classInit);
+// # # # # # # # # # # # # # # # # # # # #
 
-echoSection('Array (seq) of objects (ConstructorClass)');
+echoSection('Array (string key) of objects (BasicPlainClass)');
 $measurement = new Measurement();
 
 
@@ -49,16 +52,17 @@ $measurement = new Measurement();
 echoHeader(CASE_CREATE, ELEMENTS_COUNT);
 unset($arraysOf, $element);
 $measurement->start();
-/** @var ConstructorClass[] $arraysOf */
+/** @var array<non-empty-string, BasicPlainClass> $arraysOf */
 $arraysOf = [];
 for ($i = 0; $i < ELEMENTS_COUNT; $i++) {
-    $element = new ConstructorClass(
-        valueOfInfo(CASE_CREATE, $i),
-        valueOfFirst($i),
-        $i
-    );
-    $arraysOf[] = $element;
+    $valueInfo = valueOfInfo(CASE_CREATE, $i);
+    $element = new BasicPlainClass();
+    $element->info = $valueInfo;
+    $element->first = valueOfFirst($i);
+    $element->second = $i;
+    $arraysOf[$valueInfo] = $element;
 }
+unset($valueInfo);
 $measurement->stop();
 echoResults($measurement);
 
@@ -80,58 +84,22 @@ echoResults($measurement);
 
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_2);
-unset($element, $valueInfo, $valueFirst, $valueSecond);
-$measurement->start();
-for ($i = 0; $i < REPETITIONS_GET; $i++) {
-    foreach ($arraysOf as $element) {
-        $valueInfo = $element->getInfo();
-        $valueFirst = $element->getFirst();
-        $valueSecond = $element->getSecond();
-    }
-}
-$measurement->stop();
-echoResults($measurement);
+echoResults();
 
 
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_3);
-unset($element, $valueInfo, $valueFirst, $valueSecond);
-$measurement->start();
-for ($i = 0; $i < REPETITIONS_GET; $i++) {
-    foreach ($arraysOf as $element) {
-        [$valueInfo, $valueFirst, $valueSecond] = $element->getAll();
-    }
-}
-$measurement->stop();
-echoResults($measurement);
+echoResults();
 
 
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_4);
-unset($element, $valueInfo, $valueFirst, $valueSecond);
-$measurement->start();
-for ($i = 0; $i < REPETITIONS_GET; $i++) {
-    foreach ($arraysOf as $element) {
-        $valueInfo = $element->getInfoByTrait();
-        $valueFirst = $element->getFirstByTrait();
-        $valueSecond = $element->getSecondByTrait();
-    }
-}
-$measurement->stop();
-echoResults($measurement);
+echoResults();
 
 
 
 echoHeader(CASE_GET, count($arraysOf) * REPETITIONS_GET, CASE_GET_5);
-unset($element, $valueInfo, $valueFirst, $valueSecond);
-$measurement->start();
-for ($i = 0; $i < REPETITIONS_GET; $i++) {
-    foreach ($arraysOf as $element) {
-        [$valueInfo, $valueFirst, $valueSecond] = $element->getAllByTrait();
-    }
-}
-$measurement->stop();
-echoResults($measurement);
+echoResults();
 
 
 
@@ -215,7 +183,7 @@ unset($element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     $arraysOf = array_map(
-        function(ConstructorClass $element) use ($i): ConstructorClass {
+        function(BasicPlainClass $element) use ($i): BasicPlainClass {
             $element->info = valueOfInfo(CASE_SET_3, $i);
             $element->first = valueOfFirst($i);
             $element->second = $i;
@@ -235,7 +203,7 @@ $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     array_walk(
         $arraysOf,
-        function(ConstructorClass &$element) use ($i): bool {
+        function(BasicPlainClass &$element) use ($i): bool {
             $element->info = valueOfInfo(CASE_SET_4, $i);
             $element->first = valueOfFirst($i);
             $element->second = $i;
@@ -245,7 +213,3 @@ for ($i = 0; $i < REPETITIONS_SET; $i++) {
 }
 $measurement->stop();
 echoResults($measurement);
-
-
-
-unset($arraysOf);

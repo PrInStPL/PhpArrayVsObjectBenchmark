@@ -10,7 +10,7 @@ require_once(ABS_PATH . '/Core/constants.php');
 require_once(ABS_PATH . '/Core/functions.php');
 
 use PhpArrayVsObjectBenchmark\Classes\Measurement;
-use PhpArrayVsObjectBenchmark\Classes\SetterMultipleClass;
+use PhpArrayVsObjectBenchmark\Classes\SetterSingleVoidClass;
 use function PhpArrayVsObjectBenchmark\Core\ {
     echoHeader,
     echoResults,
@@ -40,8 +40,11 @@ use const PhpArrayVsObjectBenchmark\{
 };
 
 # # # # # # # # # # # # # # # # # # # #
+$classInit = new SetterSingleVoidClass();
+unset($classInit);
+// # # # # # # # # # # # # # # # # # # # #
 
-echoSection('Array (seq) of objects (SetterMultipleClass)');
+echoSection('Array (seq) of objects (SetterSingleVoidClass)');
 $measurement = new Measurement();
 
 
@@ -49,15 +52,13 @@ $measurement = new Measurement();
 echoHeader(CASE_CREATE, ELEMENTS_COUNT);
 unset($arraysOf, $element);
 $measurement->start();
-/** @var SetterMultipleClass[] $arraysOf */
+/** @var SetterSingleVoidClass[] $arraysOf */
 $arraysOf = [];
 for ($i = 0; $i < ELEMENTS_COUNT; $i++) {
-    $element = new SetterMultipleClass();
-    $element->set(
-        valueOfInfo(CASE_CREATE, $i),
-        valueOfFirst($i),
-        $i
-    );
+    $element = new SetterSingleVoidClass();
+    $element->setInfo(valueOfInfo(CASE_CREATE, $i));
+    $element->setFirst(valueOfFirst($i));
+    $element->setSecond($i);
     $arraysOf[] = $element;
 }
 $measurement->stop();
@@ -186,11 +187,9 @@ unset($key, $element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     foreach ($arraysOf as $key => $element) {
-        $arraysOf[$key]->set(
-            valueOfInfo(CASE_SET_1, $i),
-            valueOfFirst($i),
-            $i
-        );
+        $arraysOf[$key]->setInfo(valueOfInfo(CASE_SET_1, $i));
+        $arraysOf[$key]->setFirst(valueOfFirst($i));
+        $arraysOf[$key]->setSecond($i);
     }
 }
 $measurement->stop();
@@ -203,11 +202,9 @@ unset($key, $element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     foreach ($arraysOf as $key => &$element) {
-        $element->set(
-            valueOfInfo(CASE_SET_2, $i),
-            valueOfFirst($i),
-            $i
-        );
+        $element->setInfo(valueOfInfo(CASE_SET_2, $i));
+        $element->setFirst(valueOfFirst($i));
+        $element->setSecond($i);
     }
 }
 $measurement->stop();
@@ -219,13 +216,11 @@ echoHeader(CASE_SET, count($arraysOf) * REPETITIONS_SET, CASE_SET_3);
 unset($element);
 $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
-    $arraysOf = array_map(
-        function(SetterMultipleClass $element) use ($i): SetterMultipleClass {
-            $element->set(
-                valueOfInfo(CASE_SET_3, $i),
-                valueOfFirst($i),
-                $i
-            );
+    array_map(
+        function(SetterSingleVoidClass $element) use ($i): SetterSingleVoidClass {
+            $element->setInfo(valueOfInfo(CASE_SET_3, $i));
+            $element->setFirst(valueOfFirst($i));
+            $element->setSecond($i);
             return $element;
         },
         $arraysOf
@@ -242,12 +237,10 @@ $measurement->start();
 for ($i = 0; $i < REPETITIONS_SET; $i++) {
     array_walk(
         $arraysOf,
-        function(SetterMultipleClass &$element) use ($i): bool {
-            $element->set(
-                valueOfInfo(CASE_SET_4, $i),
-                valueOfFirst($i),
-                $i
-            );
+        function(SetterSingleVoidClass &$element) use ($i): bool {
+            $element->setInfo(valueOfInfo(CASE_SET_4, $i));
+            $element->setFirst(valueOfFirst($i));
+            $element->setSecond($i);
             return true;
         }
     );
